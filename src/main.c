@@ -35,27 +35,31 @@ int main(void) {
         char *args[64];
         int i = 0;
 
-        char *token = strtok(line, " ");
+        char *token = strtok(line, " \t");
 
         while (token != NULL && i < 63) {
             args[i++] = token;
-            token = strtok(NULL, " ");
+            token = strtok(NULL, " \t");
         }
 
         args[i] = NULL;
+
         pid_t pid = fork();
 
-if (pid == 0) {
-    execvp(args[0], args);
-    perror("ShellForge");
-    exit(1);
-}
-else if (pid > 0) {
-    wait(NULL);
-}
-else {
-    perror("fork");
-}
+        if (pid == 0) {
+            execvp(args[0], args);
+
+            perror("ShellForge");
+            exit(1);
+        }
+
+        if (pid > 0) {
+            wait(NULL);
+        }
+
+        if (pid < 0) {
+            perror("fork");
+        }
     }
 
     free(line);
