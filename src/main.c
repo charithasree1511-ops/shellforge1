@@ -57,6 +57,7 @@ int main(void) {
 
         if (pid == 0) {
             execvp(args[0], args);
+
             perror("ShellForge");
             exit(1);
         }
