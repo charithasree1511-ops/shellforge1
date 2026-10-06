@@ -44,11 +44,19 @@ int main(void) {
 
         args[i] = NULL;
 
+        if (strcmp(args[0], "cd") == 0) {
+            if (args[1] == NULL) {
+                fprintf(stderr, "ShellForge: cd: missing argument\n");
+            } else if (chdir(args[1]) != 0) {
+                perror("ShellForge: cd");
+            }
+            continue;
+        }
+
         pid_t pid = fork();
 
         if (pid == 0) {
             execvp(args[0], args);
-
             perror("ShellForge");
             exit(1);
         }
